@@ -30,8 +30,25 @@ const controllerDelete = async (req: any, res: any) => {
   return res.status(NOT_FOUND).json(deletedTask);
 };
 
+const controllerUpdate = async (req: any, res: any) => {
+  const { id } = req.params;
+  const task = await TasksService.serviceGetById(id);
+
+  if (!task) return res.status(NOT_FOUND).json({ code: NOT_FOUND, message: 'No Content. Try again.' });
+
+  const {
+    title, description, tags, priority, status, startDate, finalDate,
+  } = req.body;
+  const taskUpdated = await TasksService.serviceUpdate(id, {
+    title, description, tags, priority, status, startDate, finalDate,
+  });
+
+  return res.status(NOT_FOUND).json(taskUpdated);
+};
+
 module.exports = {
   controllerCreate,
   controllerGetAll,
   controllerDelete,
+  controllerUpdate,
 };

@@ -40,9 +40,22 @@ const modelDelete = async (id: string) => {
   return task;
 };
 
+const modelUpdate = async (id: string, data: Task) => {
+  const db = await connection();
+  const { matchedCount } = await db.collection('tasks')
+    .updateOne({ _id: new ObjectId(id) }, { $set: data });
+
+  if (matchedCount) {
+    return db.collection('tasks').findOne({ _id: new ObjectId(id) });
+  }
+
+  return matchedCount;
+};
+
 module.exports = {
   modelCreate,
   modelGetAll,
   modelGetById,
   modelDelete,
+  modelUpdate,
 };
