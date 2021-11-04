@@ -28,7 +28,21 @@ const serviceGetAll = async () => {
   return tasks;
 };
 
+const serviceGetById = async (id: string) => {
+  const task = await TasksModel.modelGetById(id);
+
+  return task;
+};
+
+const serviceDelete = async (id: string) => {
+  const task = await TasksModel.modelDelete(id);
+
+  return task;
+};
+
 module.exports = {
   serviceCreate,
   serviceGetAll,
+  serviceGetById,
+  serviceDelete,
 };
