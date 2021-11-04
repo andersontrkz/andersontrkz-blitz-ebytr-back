@@ -22,6 +22,13 @@ const serviceCreate = async (data: Task) => {
   return task;
 };
 
+const serviceGetAll = async () => {
+  const tasks = await TasksModel.modelGetAll();
+
+  return tasks;
+};
+
 module.exports = {
   serviceCreate,
+  serviceGetAll,
 };
