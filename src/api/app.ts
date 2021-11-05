@@ -1,10 +1,13 @@
 const express = require('express');
+const dbConnection = require('../models/connection.ts');
 
 const routes = require('../routes/index.ts');
 
 const app = express();
 
-app.get('/', (_req: any, res: any) => res.send('<h1>Home</h1>'));
+dbConnection();
+
+app.get('/', (_req: any, res: any) => res.json({ message: 'API connected' }));
 
 app.use(express.json());
 

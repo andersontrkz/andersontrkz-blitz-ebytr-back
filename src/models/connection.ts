@@ -1,22 +1,17 @@
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 
-let db = null;
+require('dotenv').config();
 
-const MONGO_DB_URL = 'mongodb://localhost:27017/TasksManager';
-const DB_NAME = 'TasksManager';
+const { MONGO_DB_URL, DB_NAME } = process.env;
 
-const OPTIONS = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+const db = `${MONGO_DB_URL}/${DB_NAME}`;
 
-const dataBase = () => (
-  db ? Promise.resolve(db)
-    : MongoClient.connect(MONGO_DB_URL, OPTIONS).then((conn) => {
-      db = conn.db(DB_NAME);
+const connection = () => mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('MongoDB Connected...'))
+  .catch((err) => console.log(err));
 
-      return db;
-    })
-);
-
-module.exports = dataBase;
+module.exports = connection;

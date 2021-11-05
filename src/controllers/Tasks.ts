@@ -21,9 +21,6 @@ const controllerGetAll = async (_req: any, res: any) => {
 
 const controllerDelete = async (req: any, res: any) => {
   const { id } = req.params;
-  const task = await TasksService.serviceGetById(id);
-
-  if (!task) return res.status(NOT_FOUND).json({ code: NOT_FOUND, message: 'No Content. Try again.' });
 
   const deletedTask = await TasksService.serviceDelete(id);
 
@@ -32,9 +29,6 @@ const controllerDelete = async (req: any, res: any) => {
 
 const controllerUpdate = async (req: any, res: any) => {
   const { id } = req.params;
-  const task = await TasksService.serviceGetById(id);
-
-  if (!task) return res.status(NOT_FOUND).json({ code: NOT_FOUND, message: 'No Content. Try again.' });
 
   const {
     title, description, tags, priority, status, startDate, finalDate,

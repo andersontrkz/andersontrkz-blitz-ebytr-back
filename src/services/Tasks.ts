@@ -1,4 +1,6 @@
-const TasksModel = require('../models/Tasks.ts');
+// BASED ON https://mongoosejs.com/docs AND https://github.com/bradtraversy/mern_shopping_list
+
+const { TasksModel } = require('../models/Tasks.ts');
 const TasksValidator = require('../validators/Tasks.ts');
 const { BAD_REQUEST } = require('../utils/statusCodes.ts');
 
@@ -17,39 +19,39 @@ const serviceCreate = async (data: Task) => {
 
   if (error) return { code: BAD_REQUEST, message: 'Invalid entries. Try again.' };
 
-  const task = await TasksModel.modelCreate(data);
+  const newTask = new TasksModel(data);
+  const createdTask = await newTask.save();
 
-  return task;
+  return createdTask;
 };
 
 const serviceGetAll = async () => {
-  const tasks = await TasksModel.modelGetAll();
+  const tasks = await TasksModel.find();
 
   return tasks;
 };
 
-const serviceGetById = async (id: string) => {
-  const task = await TasksModel.modelGetById(id);
-
-  return task;
-};
-
 const serviceDelete = async (id: string) => {
-  const task = await TasksModel.modelDelete(id);
+  const task = await TasksModel.findById(id);
+  if (!task) return { code: BAD_REQUEST, message: 'Not found. Try again.' };
 
-  return task;
+  const removedTask = await TasksModel.remove({ _id: id });
+
+  return removedTask;
 };
 
 const serviceUpdate = async (id: string, data: Task) => {
-  const task = await TasksModel.modelUpdate(id, data);
+  const task = await TasksModel.findById(id);
+  if (!task) return { code: BAD_REQUEST, message: 'Not found. Try again.' };
 
-  return task;
+  const updatedTask = await TasksModel.findOneAndUpdate({ _id: id }, data, { new: true });
+
+  return updatedTask;
 };
 
 module.exports = {
   serviceCreate,
   serviceGetAll,
-  serviceGetById,
   serviceDelete,
   serviceUpdate,
 };

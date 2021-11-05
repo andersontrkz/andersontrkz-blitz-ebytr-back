@@ -1,61 +1,38 @@
-import { ObjectId } from 'mongodb';
+import { Schema, model } from 'mongoose';
 
-const connection = require('./connection.ts');
+const TasksSchema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  priority: {
+    type: String,
+    required: true,
+  },
+  tags: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: true,
+  },
+  startDate: {
+    type: Date,
+    default: Date.now,
+  },
+  finalDate: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-export interface Task {
-  title: string,
-  description: string,
-  tags: string,
-  priority: string,
-  status: string,
-  startDate: string,
-  finalDate: string
-}
-
-const modelCreate = async (data: Task) => {
-  const db = await connection();
-  const task = await db.collection('tasks').insertOne(data);
-
-  return task;
-};
-
-const modelGetAll = async () => {
-  const db = await connection();
-  const tasks = await db.collection('tasks').find({}).toArray();
-
-  return tasks;
-};
-
-const modelGetById = async (id: string) => {
-  const db = await connection();
-  const task = await db.collection('tasks').findOne({ _id: new ObjectId(id) });
-
-  return task;
-};
-
-const modelDelete = async (id: string) => {
-  const db = await connection();
-  const task = await db.collection('tasks').deleteOne({ _id: new ObjectId(id) });
-
-  return task;
-};
-
-const modelUpdate = async (id: string, data: Task) => {
-  const db = await connection();
-  const { matchedCount } = await db.collection('tasks')
-    .updateOne({ _id: new ObjectId(id) }, { $set: data });
-
-  if (matchedCount) {
-    return db.collection('tasks').findOne({ _id: new ObjectId(id) });
-  }
-
-  return matchedCount;
-};
+const TasksModel = model('tasks', TasksSchema);
 
 module.exports = {
-  modelCreate,
-  modelGetAll,
-  modelGetById,
-  modelDelete,
-  modelUpdate,
+  TasksModel,
 };

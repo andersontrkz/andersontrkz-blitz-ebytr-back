@@ -1,5 +1,7 @@
 const server = require('./app.ts');
 
-const PORT = 3000;
+require('dotenv').config();
+
+const { PORT } = process.env;
 
 server.listen(PORT, () => console.log(`Running at port ${PORT}`));
