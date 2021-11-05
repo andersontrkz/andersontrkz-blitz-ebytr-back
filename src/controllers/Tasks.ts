@@ -1,5 +1,4 @@
 const TasksService = require('../services/Tasks.ts');
-const { CREATE, NOT_FOUND } = require('../utils/statusCodes.ts');
 
 const controllerCreate = async (req: any, res: any) => {
   const {
@@ -10,13 +9,13 @@ const controllerCreate = async (req: any, res: any) => {
     title, description, tags, priority, status, startDate, finalDate,
   });
 
-  return res.status(CREATE).json(task);
+  return res.status(201).json(task);
 };
 
 const controllerGetAll = async (_req: any, res: any) => {
   const tasks = await TasksService.serviceGetAll();
 
-  return res.status(NOT_FOUND).json(tasks);
+  return res.status(200).json(tasks);
 };
 
 const controllerDelete = async (req: any, res: any) => {
@@ -24,7 +23,7 @@ const controllerDelete = async (req: any, res: any) => {
 
   const deletedTask = await TasksService.serviceDelete(id);
 
-  return res.status(NOT_FOUND).json(deletedTask);
+  return res.status(200).json(deletedTask);
 };
 
 const controllerUpdate = async (req: any, res: any) => {
@@ -37,7 +36,7 @@ const controllerUpdate = async (req: any, res: any) => {
     title, description, tags, priority, status, startDate, finalDate,
   });
 
-  return res.status(NOT_FOUND).json(taskUpdated);
+  return res.status(200).json(taskUpdated);
 };
 
 module.exports = {

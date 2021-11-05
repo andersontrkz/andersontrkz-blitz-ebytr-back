@@ -2,7 +2,6 @@
 
 const { TasksModel } = require('../models/Tasks.ts');
 const TasksValidator = require('../validators/Tasks.ts');
-const { BAD_REQUEST } = require('../utils/statusCodes.ts');
 
 export interface Task {
   title: string,
@@ -17,7 +16,7 @@ export interface Task {
 const serviceCreate = async (data: Task) => {
   const { error } = TasksValidator.tasksFields(data);
 
-  if (error) return { code: BAD_REQUEST, message: 'Invalid entries. Try again.' };
+  if (error) return { code: 404, message: 'Invalid entries. Try again.' };
 
   const newTask = new TasksModel(data);
   const createdTask = await newTask.save();
@@ -33,7 +32,7 @@ const serviceGetAll = async () => {
 
 const serviceDelete = async (id: string) => {
   const task = await TasksModel.findById(id);
-  if (!task) return { code: BAD_REQUEST, message: 'Not found. Try again.' };
+  if (!task) return { code: 404, message: 'Not found. Try again.' };
 
   const removedTask = await TasksModel.remove({ _id: id });
 
@@ -42,7 +41,7 @@ const serviceDelete = async (id: string) => {
 
 const serviceUpdate = async (id: string, data: Task) => {
   const task = await TasksModel.findById(id);
-  if (!task) return { code: BAD_REQUEST, message: 'Not found. Try again.' };
+  if (!task) return { code: 404, message: 'Not found. Try again.' };
 
   const updatedTask = await TasksModel.findOneAndUpdate({ _id: id }, data, { new: true });
 
